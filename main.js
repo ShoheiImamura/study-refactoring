@@ -3,7 +3,6 @@ const plays = require("./plays.json");
 
 function statement(invoice, plays) {
   let totalAmount = 0;
-  let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
 
   function usd(aNumber) {
@@ -51,6 +50,7 @@ function statement(invoice, plays) {
     return result;
   }
 
+  let volumeCredits = 0;
   for (let perf of invoice.performances) {
     // ボリューム特典のポイントを加算
     volumeCredits += volumeCreditsFor(perf);
