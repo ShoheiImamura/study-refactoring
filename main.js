@@ -5,6 +5,8 @@ function statement(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice.customer;
   statementData.performances = invoice.performances.map(enrichPerformance);
+  statementData.totalAmount = totalAmount(statementData);
+  statementData.totalVolumeCredits = totalVolumeCredits(statementData);
   return renderPlainText(statementData, invoice, plays);
 
   function enrichPerformance(aPerformance) {
@@ -49,6 +51,23 @@ function statement(invoice, plays) {
       result += Math.floor(aPerformance.audience / 5);
     return result;
   }
+
+  function totalAmount(data) {
+    let result = 0;
+    for (let perf of data.performances) {
+      // 注文の内訳を出力
+      result += perf.amount;
+    }
+    return result;
+  }
+
+  function totalVolumeCredits(data) {
+    let volumeCredits = 0;
+    for (let perf of data.performances) {
+      volumeCredits += perf.volumeCredit;
+    }
+    return volumeCredits;
+  }
 }
 
 function renderPlainText(data, invoice, plays) {
@@ -58,26 +77,9 @@ function renderPlainText(data, invoice, plays) {
       perf.audience
     } seats)\n`;
   }
-  result += `Amount owed is ${usd(totalAmount())}\n`;
-  result += `You earned ${totalVolumeCredits()} credits \n`;
+  result += `Amount owed is ${usd(data.totalAmount)}\n`;
+  result += `You earned ${data.totalVolumeCredits} credits \n`;
   return result;
-
-  function totalAmount() {
-    let result = 0;
-    for (let perf of data.performances) {
-      // 注文の内訳を出力
-      result += perf.amount;
-    }
-    return result;
-  }
-
-  function totalVolumeCredits() {
-    let volumeCredits = 0;
-    for (let perf of data.performances) {
-      volumeCredits += perf.volumeCredit;
-    }
-    return volumeCredits;
-  }
 
   function usd(aNumber) {
     return new Intl.NumberFormat("ue-US", {
@@ -85,14 +87,6 @@ function renderPlainText(data, invoice, plays) {
       currency: "USD",
       minimumFractionDifits: 2,
     }).format(aNumber / 100);
-  }
-
-  function volumeCreditsFor(aPerformance) {
-    let result = 0;
-    result += Math.max(aPerformance.audience - 30, 0);
-    if ("comedy" == aPerformance.play.type)
-      result += Math.floor(aPerformance.audience / 5);
-    return result;
   }
 }
 
