@@ -6,12 +6,12 @@ function statement(invoice, plays) {
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
 
-  function format(aNumber) {
+  function usd(aNumber) {
     return new Intl.NumberFormat("ue-US", {
       style: "currency",
       currency: "USD",
       minimumFractionDifits: 2,
-    }).format(aNumber);
+    }).format(aNumber / 100);
   }
 
   // 問合せによる一時変数の置き換え
@@ -56,13 +56,13 @@ function statement(invoice, plays) {
     volumeCredits += volumeCreditsFor(perf);
 
     // 注文の内訳を出力
-    result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
+    result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
       perf.audience
     } seats)\n`;
     totalAmount += amountFor(perf);
   }
 
-  result += `Amount owed is ${format(totalAmount / 100)}\n`;
+  result += `Amount owed is ${usd(totalAmount)}\n`;
   result += `You earned ${volumeCredits} credits \n`;
   return result;
 }
