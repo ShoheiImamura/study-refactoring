@@ -6,11 +6,13 @@ function statement(invoice, plays) {
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
 
-  const format = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDifits: 2,
-  }).format;
+  function format(aNumber) {
+    return new Intl.NumberFormat("ue-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDifits: 2,
+    }).format(aNumber);
+  }
 
   // 問合せによる一時変数の置き換え
   function playFor(aPerformance) {
@@ -22,7 +24,7 @@ function statement(invoice, plays) {
     let result = 0;
     result += Math.max(aPerformance.audience - 30, 0);
     if ("comedy" == playFor(aPerformance).type)
-    result += Math.floor(aPerformance.audience / 5);
+      result += Math.floor(aPerformance.audience / 5);
     return result;
   }
 
