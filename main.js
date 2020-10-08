@@ -3,18 +3,22 @@ const plays = require("./plays.json");
 
 function statement(invoice, plays) {
   let result = `Statement for ${invoice.customer}\n`;
-
-  function usd(aNumber) {
-    return new Intl.NumberFormat("ue-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDifits: 2,
-    }).format(aNumber / 100);
+  for (let perf of invoice.performances) {
+    result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    } seats)\n`;
   }
+  result += `Amount owed is ${usd(totalAmount())}\n`;
+  result += `You earned ${totalVolumeCredits()} credits \n`;
+  return result;
 
-  // 問合せによる一時変数の置き換え
-  function playFor(aPerformance) {
-    return plays[aPerformance.playID];
+  function totalAmount() {
+    let result = 0;
+    for (let perf of invoice.performances) {
+      // 注文の内訳を出力
+      result += amountFor(perf);
+    }
+    return result;
   }
 
   function totalVolumeCredits() {
@@ -25,13 +29,24 @@ function statement(invoice, plays) {
     return volumeCredits;
   }
 
-  // ボリュームポイントの計算
+  function usd(aNumber) {
+    return new Intl.NumberFormat("ue-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDifits: 2,
+    }).format(aNumber / 100);
+  }
+
   function volumeCreditsFor(aPerformance) {
     let result = 0;
     result += Math.max(aPerformance.audience - 30, 0);
     if ("comedy" == playFor(aPerformance).type)
       result += Math.floor(aPerformance.audience / 5);
     return result;
+  }
+
+  function playFor(aPerformance) {
+    return plays[aPerformance.playID];
   }
 
   function amountFor(aPerformance) {
@@ -56,25 +71,6 @@ function statement(invoice, plays) {
     }
     return result;
   }
-
-  function totalAmount() {
-    let result = 0;
-    for (let perf of invoice.performances) {
-      // 注文の内訳を出力
-      result += amountFor(perf);
-    }
-    return result;
-  }
-
-  for (let perf of invoice.performances) {
-    result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
-      perf.audience
-    } seats)\n`;
-  }
-
-  result += `Amount owed is ${usd(totalAmount())}\n`;
-  result += `You earned ${totalVolumeCredits()} credits \n`;
-  return result;
 }
 
 const result = statement(invoice, plays);
