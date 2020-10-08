@@ -5,13 +5,19 @@ function statement(invoice, plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
+
+  // 問合せによる一時変数の置き換え
+  function playFor(aPerformance) {
+    return plays[aPerformance.playID];
+  }
+
   const format = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     minimumFractionDifits: 2,
   }).format;
   for (let perf of invoice.performances) {
-    const play = plays[perf.playID];
+    const play = playFor(perf);
     let thisAmount = amountFor(perf, play);
 
     // ボリューム特典のポイントを加算
