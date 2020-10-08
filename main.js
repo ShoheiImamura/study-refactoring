@@ -22,7 +22,7 @@ function statement(invoice, plays) {
     result += ` ${play.name}: ${format(thisAmount / 100)} (${
       perf.audience
     } seats)\n`;
-    result += `Amount owed is ${format(totalAmount / 100)}\n}`;
+    result += `Amount owed is ${format(totalAmount / 100)}\n`;
     result += `You earned ${volumeCredits} credits \n`;
     return result;
   }
