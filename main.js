@@ -54,7 +54,9 @@ function statement(invoice, plays) {
   for (let perf of invoice.performances) {
     // ボリューム特典のポイントを加算
     volumeCredits += volumeCreditsFor(perf);
+  }
 
+  for (let perf of invoice.performances) {
     // 注文の内訳を出力
     result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
       perf.audience
