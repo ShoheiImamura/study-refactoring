@@ -18,6 +18,14 @@ function statement(invoice, plays) {
     return plays[aPerformance.playID];
   }
 
+  function totalVolumeCredits() {
+    let volumeCredits = 0;
+    for (let perf of invoice.performances) {
+      volumeCredits += volumeCreditsFor(perf);
+    }
+    return volumeCredits;
+  }
+
   // ボリュームポイントの計算
   function volumeCreditsFor(aPerformance) {
     let result = 0;
@@ -50,11 +58,7 @@ function statement(invoice, plays) {
     return result;
   }
 
-  let volumeCredits = 0;
-  for (let perf of invoice.performances) {
-    // ボリューム特典のポイントを加算
-    volumeCredits += volumeCreditsFor(perf);
-  }
+  let volumeCredits = totalVolumeCredits();
 
   for (let perf of invoice.performances) {
     // 注文の内訳を出力
