@@ -6,6 +6,12 @@ function statement(invoice, plays) {
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
 
+  const format = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDifits: 2,
+  }).format;
+
   // 問合せによる一時変数の置き換え
   function playFor(aPerformance) {
     return plays[aPerformance.playID];
@@ -20,25 +26,6 @@ function statement(invoice, plays) {
     return volumeCredits;
   }
 
-  const format = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDifits: 2,
-  }).format;
-  for (let perf of invoice.performances) {
-    let thisAmount = amountFor(perf);
-
-    // ボリューム特典のポイントを加算
-    volumeCredits += volumeCreditsFor(perf);
-
-    // 注文の内訳を出力
-    result += ` ${playFor(perf).name}: ${format(thisAmount / 100)} (${
-      perf.audience
-    } seats)\n`;
-    totalAmount += thisAmount;
-  }
-
-  // 関数の分割
   function amountFor(aPerformance) {
     let result = 0;
 
@@ -61,6 +48,18 @@ function statement(invoice, plays) {
     }
     return result;
   }
+
+  for (let perf of invoice.performances) {
+    // ボリューム特典のポイントを加算
+    volumeCredits += volumeCreditsFor(perf);
+
+    // 注文の内訳を出力
+    result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
+      perf.audience
+    } seats)\n`;
+    totalAmount += amountFor(perf);
+  }
+
   result += `Amount owed is ${format(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits \n`;
   return result;
