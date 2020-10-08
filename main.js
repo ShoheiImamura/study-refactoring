@@ -19,11 +19,11 @@ function statement(invoice, plays) {
 
   // ボリュームポイントの計算
   function volumeCreditsFor(aPerformance) {
-    let volumeCredits = 0;
-    volumeCredits += Math.max(aPerformance.audience - 30, 0);
+    let result = 0;
+    result += Math.max(aPerformance.audience - 30, 0);
     if ("comedy" == playFor(aPerformance).type)
-      volumeCredits += Math.floor(aPerformance.audience / 5);
-    return volumeCredits;
+    result += Math.floor(aPerformance.audience / 5);
+    return result;
   }
 
   function amountFor(aPerformance) {
