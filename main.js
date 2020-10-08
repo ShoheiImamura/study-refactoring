@@ -58,8 +58,6 @@ function statement(invoice, plays) {
     return result;
   }
 
-  let volumeCredits = totalVolumeCredits();
-
   for (let perf of invoice.performances) {
     // 注文の内訳を出力
     result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
@@ -69,7 +67,7 @@ function statement(invoice, plays) {
   }
 
   result += `Amount owed is ${usd(totalAmount)}\n`;
-  result += `You earned ${volumeCredits} credits \n`;
+  result += `You earned ${totalVolumeCredits()} credits \n`;
   return result;
 }
 
