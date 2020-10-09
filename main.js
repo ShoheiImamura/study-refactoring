@@ -51,22 +51,11 @@ function statement(invoice, plays) {
       result += Math.floor(aPerformance.audience / 5);
     return result;
   }
-
   function totalAmount(data) {
-    let result = 0;
-    for (let perf of data.performances) {
-      // 注文の内訳を出力
-      result += perf.amount;
-    }
-    return result;
+    return data.performances.reduce((total, p) => total + p.amount, 0);
   }
-
   function totalVolumeCredits(data) {
-    let volumeCredits = 0;
-    for (let perf of data.performances) {
-      volumeCredits += perf.volumeCredit;
-    }
-    return volumeCredits;
+    return data.performances.reduce((total, p) => total + p.volumeCredit, 0);
   }
 }
 
