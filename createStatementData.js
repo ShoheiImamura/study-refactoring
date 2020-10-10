@@ -62,11 +62,7 @@ class PerformanceCalculator {
 
 class TragedyCalculator extends PerformanceCalculator {
   get amount() {
-    let result = 40000;
-    if (this.performance.audience > 30) {
-      result += 1000 * (this.performance.audience - 30);
-    }
-    return result;
+    return Math.max(this.performance.audience - 30, 0);
   }
 }
 class ComedyCalculator extends PerformanceCalculator {
@@ -77,5 +73,8 @@ class ComedyCalculator extends PerformanceCalculator {
     }
     result += 300 * this.performance.audience;
     return result;
+  }
+  get volumeCredits() {
+    return super.volumeCredits + Math.floor(this.performance.audience / 5);
   }
 }

@@ -13,6 +13,7 @@ function htmlStatement(invoice, plays) {
   const statementData = createStatementData(invoice, plays);
   return renderHtml(statementData);
 }
+
 function renderPlainText(data) {
   let result = `Statement for ${data.customer}\n`;
   for (let perf of data.performances) {
@@ -37,16 +38,15 @@ function renderHtml(data) {
   result += `<p>Amount owed is <em>${usd(data.totalAmount)}</em></p>\n`;
   result += `<p>You earned <em>${data.totalVolumeCredits}</em> credits</p>\n`;
   return result;
-
-  function usd(aNumber) {
-    return new Intl.NumberFormat("ue-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDifits: 2,
-    }).format(aNumber / 100);
-  }
 }
 
-// const result = statement(invoice, plays);
-const result = htmlStatement(invoice, plays);
+function usd(aNumber) {
+  return new Intl.NumberFormat("ue-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDifits: 2,
+  }).format(aNumber / 100);
+}
+const result = statement(invoice, plays);
+// const result = htmlStatement(invoice, plays);
 console.log(result);
