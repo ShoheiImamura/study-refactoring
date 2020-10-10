@@ -9,7 +9,7 @@ function statement(invoice, plays) {
   return renderPlainText(statementData, invoice, plays);
 }
 
-function renderPlainText(data, invoice, plays) {
+function renderPlainText(data) {
   let result = `Statement for ${data.customer}\n`;
   for (let perf of data.performances) {
     result += ` ${perf.play.name}: ${usd(perf.amount)} (${
