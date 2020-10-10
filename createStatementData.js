@@ -55,3 +55,9 @@ export default function createStatementData(invoice, plays) {
     return data.performances.reduce((total, p) => total + p.volumeCredit, 0);
   }
 }
+
+class PerformanceCalculator {
+  constructor(aPerformance) {
+    this.performance = aPerformance;
+  }
+}
